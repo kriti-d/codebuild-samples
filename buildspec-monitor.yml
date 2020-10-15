@@ -1,0 +1,19 @@
+# Use Case: Fail build for high severity issues
+version: 0.2
+
+env:
+  parameter-store:
+    # Requires that you have a secure string in the paramter store in AWS Systems Manager 
+    SNYK_TOKEN: "SNYK_TOKEN"	    
+    SNYK_ORG: "SNYK_ORG"
+
+phases:
+  install:
+    commands:
+      - npm install -g snyk
+
+  build:
+    commands:
+      - npm install
+      - npm test  # Run your unit tests, etc
+      - snyk monitor --org="${SNYK_ORG}"
